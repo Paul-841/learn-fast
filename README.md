@@ -27,6 +27,8 @@ learn-fast/
 ├── references/evidence.md    # 全部证据与引用
 ├── scripts/review_schedule.py# 复习排期计算器（10–20% 规则，纯标准库）
 ├── agent/learning-coach.md   # 智能体系统提示词（任何聊天 AI 可用，无需工具）
+├── agent/learning_coach.py   # ★ 程序型智能体：可独立运行的学习教练（零依赖）
+├── docs/分享文案.md           # 转发给朋友/发帖用的现成文案
 └── deck/                     # 13 页幻灯片（pptx + pdf）
 ```
 
@@ -55,6 +57,19 @@ mkdir -p ~/.agents/skills && cp -r learn-fast ~/.agents/skills/
 python scripts/review_schedule.py --goal-days 180
 # 输出：第 1 次 2026-11-20（27 天后）→ 第 2 次 2027-01-04（45 天后）→ …
 ```
+
+### 4️⃣ 运行真正的智能体程序（程序型 Agent）
+
+`agent/learning_coach.py` 是一个**可独立运行**的学习教练智能体：LLM 是大脑，程序提供工作循环、学习日志（记忆）和复习排期（工具）——机制与大型 Agent 项目同款，单文件、零依赖、100 余行。
+
+```bash
+# 任意 OpenAI 兼容接口；默认智谱 glm-4-flash（免费）
+export LEARN_FAST_API_KEY=你的key        # PowerShell: $env:LEARN_FAST_API_KEY="你的key"
+python agent/learning_coach.py
+# 会话内：/quiz 提取练习 · /schedule 30 排 30 天复习计划 · /log 看日志 · /exit
+```
+
+回访时它会读取上次的学习日志，**先考你上次的题**再教新内容——间隔 + 提取，两条最硬的证据都固化进了代码。
 
 ### 幻灯片
 
