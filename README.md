@@ -95,6 +95,12 @@ python agent/butler.py --remove-task  # 不想要了就删
 
 至此形成闭环：**researcher 生产地图和题目 → coach 日常教练并记日志 → butler 每天早上把到期的端到你面前**。
 
+### 装到另一台电脑（3 分钟，无需命令行）
+
+1. **装 Python**：python.org 下载安装（勾选 Add to PATH）
+2. **拿项目**：本仓库页面点绿色 `Code` → `Download ZIP` → 解压（会 git 的直接 clone 也行）
+3. **双击 `learn.bat`**：菜单里选 3（今日复习）/ 4（排计划）**不用任何 Key**；选 1（教练）/ 2（研究员）时按提示粘贴一次智谱 API Key（open.bigmodel.cn 免费注册）
+
 ### 幻灯片
 
 `deck/` 里的 13 页 PPT 本身就是方法论的示范：第 2 页先给全景图（框架先行）、每页一个视觉焦点（双重编码）、结尾三道自测题（提取练习）。可直接用于分享与教学。
