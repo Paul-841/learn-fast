@@ -10,7 +10,7 @@ echo    Learn Fast 学习三件套
 echo ------------------------------------------
 echo    1. 学习教练   对话陪练，每讲完必考你（需 API Key）
 echo    2. 研究员     给个主题，自动查资料出材料（需 API Key）
-echo    3. 今日复习   看看今天有什么到期的（不需要 Key）
+echo    3. 今日复习   逐题作答+自评，算法自动排下次（不需要 Key）
 echo    4. 排复习计划 想记多久，告诉你哪天复习（不需要 Key）
 echo    0. 退出
 echo ==========================================
@@ -37,7 +37,7 @@ pause
 goto menu
 
 :today
-python agent\butler.py
+python agent\butler.py --review
 pause
 goto menu
 
