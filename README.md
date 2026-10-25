@@ -64,7 +64,7 @@ python scripts/review_schedule.py --goal-days 180
 `agent/learning_coach.py` 是一个**可独立运行**的学习教练智能体：LLM 是大脑，程序提供工作循环、学习日志（记忆）和复习排期（工具）——机制与大型 Agent 项目同款，单文件、零依赖、100 余行。
 
 ```bash
-# 任意 OpenAI 兼容接口；默认智谱 glm-4-flash（免费）
+# 任意 OpenAI 兼容接口；默认智谱旗舰 GLM-5.3（模型不可用自动降级 GLM-5.3-Flash，可 env 覆盖）
 export LEARN_FAST_API_KEY=你的key        # PowerShell: $env:LEARN_FAST_API_KEY="你的key"
 python agent/learning_coach.py
 # 会话内：/quiz 提取练习 · /schedule 30 排 30 天复习计划 · /log 看日志 · /exit

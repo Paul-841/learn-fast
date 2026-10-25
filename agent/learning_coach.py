@@ -9,7 +9,7 @@
   2. 设置环境变量：
        Windows PowerShell:  $env:LEARN_FAST_API_KEY="你的key"
        macOS / Linux:       export LEARN_FAST_API_KEY=你的key
-     可选：LEARN_FAST_BASE_URL（默认智谱）、LEARN_FAST_MODEL（默认 glm-4-flash 免费）
+     可选：LEARN_FAST_BASE_URL（默认智谱）、LEARN_FAST_MODEL（默认旗舰 glm-5.3，可改 glm-5.3-flash 免费）
   3. python agent/learning_coach.py
 
 会话内命令：/new 开新主题 · /quiz 提取练习 · /log 看日志 · /schedule N 排复习 · /exit 退出
@@ -22,7 +22,7 @@ import urllib.request
 from datetime import date, timedelta
 
 BASE_URL = os.environ.get("LEARN_FAST_BASE_URL", "https://open.bigmodel.cn/api/paas/v4")
-MODEL = os.environ.get("LEARN_FAST_MODEL", "glm-4-flash")
+MODEL = os.environ.get("LEARN_FAST_MODEL", "glm-5.3")
 API_KEY = os.environ.get("LEARN_FAST_API_KEY", "")
 LOGS_DIR = os.path.join(os.getcwd(), "learn-fast-logs")
 

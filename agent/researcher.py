@@ -7,7 +7,7 @@
   3. 反思：审视证据够不够，不够就补搜（自主循环）
   4. 成稿：产出三份文件——学习地图 / 提取问题 / Anki 牌组 CSV
 
-零第三方依赖。LLM 走任意 OpenAI 兼容接口（默认智谱 glm-4-flash 免费模型）；
+零第三方依赖。LLM 走任意 OpenAI 兼容接口（默认智谱旗舰 glm-5.3，不可用自动降级 glm-5.3-flash）；
 搜索三级降级：智谱 web-search-pro（与模型共用同一个 Key）→ DuckDuckGo → Wikipedia。
 （注：直接爬 Bing 会拿到它喂给脚本的假结果，别走那条路。）
 
@@ -25,12 +25,14 @@ import json
 import os
 import re
 import sys
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import date, timedelta
 
 BASE_URL = os.environ.get("LEARN_FAST_BASE_URL", "https://open.bigmodel.cn/api/paas/v4")
-MODEL = os.environ.get("LEARN_FAST_MODEL", "glm-4-flash")
+MODEL_CANDIDATES = ["glm-5.3", "glm-5.3-flash", "glm-4-flash"]
+MODEL = os.environ.get("LEARN_FAST_MODEL", MODEL_CANDIDATES[0])
 API_KEY = os.environ.get("LEARN_FAST_API_KEY", "")
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
 
@@ -135,14 +137,31 @@ def fetch_page(url: str, limit: int = 2200) -> str:
 
 # ---------- LLM ----------
 def chat(messages, temperature=0.6) -> str:
+    global MODEL
     if not API_KEY:
         sys.exit("× 请先设置环境变量 LEARN_FAST_API_KEY（智谱 open.bigmodel.cn 或任意 OpenAI 兼容服务）")
-    req = urllib.request.Request(
-        BASE_URL.rstrip("/") + "/chat/completions",
-        data=json.dumps({"model": MODEL, "messages": messages, "temperature": temperature}).encode(),
-        headers={"Content-Type": "application/json", "Authorization": "Bearer " + API_KEY})
-    with urllib.request.urlopen(req, timeout=300) as r:
-        return json.loads(r.read())["choices"][0]["message"]["content"]
+    tried = []
+    while True:
+        try:
+            req = urllib.request.Request(
+                BASE_URL.rstrip("/") + "/chat/completions",
+                data=json.dumps({"model": MODEL, "messages": messages, "temperature": temperature}).encode(),
+                headers={"Content-Type": "application/json", "Authorization": "Bearer " + API_KEY})
+            with urllib.request.urlopen(req, timeout=300) as r:
+                return json.loads(r.read())["choices"][0]["message"]["content"]
+        except urllib.error.HTTPError as e:
+            body = ""
+            try:
+                body = e.read().decode("utf-8", "ignore")
+            except Exception:
+                pass
+            tried.append(MODEL)
+            nxt = next((m for m in MODEL_CANDIDATES if m not in tried), None)
+            if nxt and ("model" in body.lower() or e.code in (400, 404)):
+                print(f"    [model] {MODEL} 不可用，自动切换 {nxt}")
+                MODEL = nxt
+                continue
+            raise
 
 
 def json_block(text: str):
