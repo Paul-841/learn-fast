@@ -225,6 +225,7 @@ def research(topic: str, days: int):
             if follow and len(notes) < 18:
                 print(f"   缺口 → 补搜：{follow}")
                 notes += gather(follow)
+                digest = "\n".join(f"- [{n['q']}] {n['title']}: {n['text'][:400]}" for n in notes) or "（无）"
     except Exception as e:
         print(f"   （反思步骤跳过：{e}）")
 
@@ -255,7 +256,7 @@ def research(topic: str, days: int):
         f.write(f"# {topic} · 提取问题\n\n先答后看！\n\n{qs_doc}\n")
     rows = []
     for line in anki_doc.splitlines():
-        line = line.strip()
+        line = line.strip().replace("，", ",")
         if line.count(",") >= 2 and not line.lower().startswith("front"):
             rows.append(line)
     with open(os.path.join(outdir, "anki.csv"), "w", encoding="utf-8", newline="") as f:
