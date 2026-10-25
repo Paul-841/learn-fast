@@ -28,6 +28,7 @@ learn-fast/
 ├── scripts/review_schedule.py# 复习排期计算器（10–20% 规则，纯标准库）
 ├── agent/learning-coach.md   # 智能体系统提示词（任何聊天 AI 可用，无需工具）
 ├── agent/learning_coach.py   # ★ 程序型智能体：可独立运行的学习教练（零依赖）
+├── agent/researcher.py       # ★★ 自主研究智能体：规划→搜索→反思→成稿（同款 Agent 循环）
 ├── docs/分享文案.md           # 转发给朋友/发帖用的现成文案
 └── deck/                     # 13 页幻灯片（pptx + pdf）
 ```
@@ -70,6 +71,16 @@ python agent/learning_coach.py
 ```
 
 回访时它会读取上次的学习日志，**先考你上次的题**再教新内容——间隔 + 提取，两条最硬的证据都固化进了代码。
+
+### 5️⃣ 自主研究智能体（plan → search → reflect → write）
+
+`agent/researcher.py` 是标准意义的自主智能体循环：给它一个主题，它自己**拆解子问题 → 联网搜索抓正文 → 反思证据缺口并补搜 → 产出三份材料**（学习地图 / 20 道提取问题 / Anki CSV）。搜索走智谱 web-search-pro（与模型同一个 Key），自动降级 DuckDuckGo / Wikipedia。
+
+```bash
+export LEARN_FAST_API_KEY=你的key
+python agent/researcher.py "SQL 入门" --days 90
+# 产出 learn-fast-research/SQL-入门-日期/ 下的三个文件，含复习计划与资料来源
+```
 
 ### 幻灯片
 
