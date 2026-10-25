@@ -29,6 +29,7 @@ learn-fast/
 ├── agent/learning-coach.md   # 智能体系统提示词（任何聊天 AI 可用，无需工具）
 ├── agent/learning_coach.py   # ★ 程序型智能体：可独立运行的学习教练（零依赖）
 ├── agent/researcher.py       # ★★ 自主研究智能体：规划→搜索→反思→成稿（同款 Agent 循环）
+├── agent/butler.py           # ★ 学习管家：定时收集到期复习题，生成"今日复习"（零Key零联网）
 ├── docs/分享文案.md           # 转发给朋友/发帖用的现成文案
 └── deck/                     # 13 页幻灯片（pptx + pdf）
 ```
@@ -81,6 +82,18 @@ export LEARN_FAST_API_KEY=你的key
 python agent/researcher.py "SQL 入门" --days 90
 # 产出 learn-fast-research/SQL-入门-日期/ 下的三个文件，含复习计划与资料来源
 ```
+
+### 6️⃣ 学习管家（常驻定时，OpenClaw 式定时任务的微缩版）
+
+`agent/butler.py`：每天扫描教练日志和研究员产出，把**今天到期**的复习题汇编成一页《今日复习》（问题在前、答案在最后——先答后看）。纯本地、零 Key、零联网、不碰 shell：最小权限，天生安全。
+
+```bash
+python agent/butler.py                # 手动跑一次，生成 learn-fast-today/今日复习.md
+python agent/butler.py --install-task # 注册 Windows 每日 08:00 计划任务，之后全自动
+python agent/butler.py --remove-task  # 不想要了就删
+```
+
+至此形成闭环：**researcher 生产地图和题目 → coach 日常教练并记日志 → butler 每天早上把到期的端到你面前**。
 
 ### 幻灯片
 
